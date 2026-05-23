@@ -1,8 +1,8 @@
 ---
 title: Mem0 项目深度分析
 date: 2026-05-23
-category: 技术
-tags: [Mem0, 架构, Mermaid]
+category: RAG
+tags: [RAG]
 description: 从写入、检索、更新和删除流程拆解 Mem0 的核心架构与关键实现。
 ---
 
