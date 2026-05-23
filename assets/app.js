@@ -14,6 +14,7 @@ const themeLabel = document.querySelector(".theme-label");
 const introTitle = document.querySelector("#intro-title");
 const introDescription = document.querySelector("#intro-description");
 const themeMedia = window.matchMedia("(prefers-color-scheme: dark)");
+let mermaidViewer = null;
 
 const themeLabels = {
   light: "亮色",
@@ -160,8 +161,152 @@ const activateMermaidBlocks = () => {
   document.querySelectorAll("pre code.language-mermaid").forEach((block) => {
     const container = document.createElement("div");
     container.className = "mermaid";
+    container.setAttribute("role", "button");
+    container.setAttribute("tabindex", "0");
+    container.setAttribute("aria-label", "打开 Mermaid 图表查看器");
     container.textContent = block.textContent;
     block.closest("pre").replaceWith(container);
+  });
+};
+
+const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+const ensureMermaidViewer = () => {
+  if (mermaidViewer) return mermaidViewer;
+
+  const viewer = document.createElement("div");
+  viewer.className = "mermaid-viewer";
+  viewer.setAttribute("aria-hidden", "true");
+  viewer.innerHTML = `
+    <div class="mermaid-viewer__bar" aria-label="Mermaid 图表工具栏">
+      <button type="button" data-action="zoom-out" aria-label="缩小">−</button>
+      <button type="button" data-action="reset" aria-label="适应屏幕">适屏</button>
+      <button type="button" data-action="zoom-in" aria-label="放大">+</button>
+      <button type="button" data-action="close" aria-label="关闭">×</button>
+    </div>
+    <div class="mermaid-viewer__stage">
+      <div class="mermaid-viewer__canvas"></div>
+    </div>`;
+  document.body.appendChild(viewer);
+
+  const canvas = viewer.querySelector(".mermaid-viewer__canvas");
+  const stage = viewer.querySelector(".mermaid-viewer__stage");
+  const state = {
+    scale: 1,
+    x: 0,
+    y: 0,
+    dragging: false,
+    startX: 0,
+    startY: 0,
+    fitScale: 1,
+  };
+
+  const applyTransform = () => {
+    canvas.style.transform = `translate(${state.x}px, ${state.y}px) scale(${state.scale})`;
+  };
+
+  const close = () => {
+    viewer.classList.remove("is-open");
+    viewer.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("has-mermaid-viewer");
+    canvas.innerHTML = "";
+  };
+
+  const reset = () => {
+    state.scale = state.fitScale;
+    state.x = 0;
+    state.y = 0;
+    applyTransform();
+  };
+
+  const zoom = (delta) => {
+    state.scale = clamp(state.scale * delta, 0.25, 5);
+    applyTransform();
+  };
+
+  viewer.addEventListener("click", (event) => {
+    const action = event.target.closest("[data-action]")?.dataset.action;
+    if (!action) return;
+    if (action === "close") close();
+    if (action === "reset") reset();
+    if (action === "zoom-in") zoom(1.18);
+    if (action === "zoom-out") zoom(0.84);
+  });
+
+  viewer.addEventListener("click", (event) => {
+    if (event.target === viewer) close();
+  });
+
+  stage.addEventListener("wheel", (event) => {
+    event.preventDefault();
+    zoom(event.deltaY > 0 ? 0.9 : 1.1);
+  }, { passive: false });
+
+  stage.addEventListener("pointerdown", (event) => {
+    state.dragging = true;
+    state.startX = event.clientX - state.x;
+    state.startY = event.clientY - state.y;
+    stage.classList.add("is-dragging");
+    stage.setPointerCapture(event.pointerId);
+  });
+
+  stage.addEventListener("pointermove", (event) => {
+    if (!state.dragging) return;
+    state.x = event.clientX - state.startX;
+    state.y = event.clientY - state.startY;
+    applyTransform();
+  });
+
+  stage.addEventListener("pointerup", (event) => {
+    state.dragging = false;
+    stage.classList.remove("is-dragging");
+    stage.releasePointerCapture(event.pointerId);
+  });
+
+  mermaidViewer = {
+    open(source) {
+      const sourceSvg = source.querySelector("svg");
+      const diagram = sourceSvg?.cloneNode(true);
+      if (!diagram) return;
+      const sourceBox = sourceSvg.getBoundingClientRect();
+      const viewBox = sourceSvg.viewBox?.baseVal;
+      const width = viewBox?.width || sourceBox.width || 900;
+      const height = viewBox?.height || sourceBox.height || 600;
+      const stageWidth = Math.max(320, window.innerWidth * 0.86);
+      const stageHeight = Math.max(240, window.innerHeight * 0.78);
+      state.fitScale = clamp(Math.min(stageWidth / width, stageHeight / height), 0.45, 2.2);
+
+      diagram.removeAttribute("style");
+      diagram.setAttribute("width", String(width));
+      diagram.setAttribute("height", String(height));
+      diagram.style.width = `${width}px`;
+      diagram.style.height = `${height}px`;
+
+      canvas.innerHTML = "";
+      canvas.appendChild(diagram);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      reset();
+      viewer.classList.add("is-open");
+      viewer.setAttribute("aria-hidden", "false");
+      document.body.classList.add("has-mermaid-viewer");
+    },
+    close,
+  };
+
+  return mermaidViewer;
+};
+
+const bindMermaidViewer = () => {
+  const viewer = ensureMermaidViewer();
+  document.querySelectorAll(".mermaid").forEach((diagram) => {
+    diagram.addEventListener("click", () => viewer.open(diagram));
+    diagram.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        viewer.open(diagram);
+      }
+    });
   });
 };
 
@@ -312,6 +457,7 @@ const renderArticle = async (slug) => {
 
   activateMermaidBlocks();
   await mermaid.run({ querySelector: ".mermaid" });
+  bindMermaidViewer();
 };
 
 const setActiveNav = () => {
@@ -384,6 +530,9 @@ searchInput.addEventListener("input", (event) => {
 });
 
 window.addEventListener("hashchange", route);
+window.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") mermaidViewer?.close();
+});
 themeToggle.addEventListener("click", cycleTheme);
 
 init().catch((error) => {
