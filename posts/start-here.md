@@ -1,8 +1,6 @@
 ---
 title: 博客从这里开始
 date: 2026-05-23
-category: 随笔
-tags: [博客, Markdown, Mermaid]
 description: 这是一篇示例文章，展示 Markdown 排版、分类标签和 Mermaid 图表渲染。
 ---
 
