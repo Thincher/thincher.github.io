@@ -11,9 +11,11 @@ const categoryList = document.querySelector("#category-list");
 const tagList = document.querySelector("#tag-list");
 const themeToggle = document.querySelector("#theme-toggle");
 const themeLabel = document.querySelector(".theme-label");
+const sidebarToggle = document.querySelector("#sidebar-toggle");
 const introTitle = document.querySelector("#intro-title");
 const introDescription = document.querySelector("#intro-description");
 const themeMedia = window.matchMedia("(prefers-color-scheme: dark)");
+const compactSidebarMedia = window.matchMedia("(max-width: 1080px)");
 let mermaidViewer = null;
 
 const themeLabels = {
@@ -73,6 +75,35 @@ const cycleTheme = () => {
   const next = current === "light" ? "dark" : "light";
   localStorage.setItem("theme-mode", next);
   applyTheme(next);
+};
+
+const getStoredSidebarMode = () => {
+  const stored = localStorage.getItem("sidebar-mode");
+  return stored === "collapsed" || stored === "expanded" ? stored : "";
+};
+
+const getDefaultSidebarMode = () =>
+  compactSidebarMedia.matches ? "collapsed" : "expanded";
+
+const applySidebarMode = (mode) => {
+  const collapsed = mode === "collapsed";
+  document.body.classList.toggle("sidebar-collapsed", collapsed);
+  sidebarToggle.setAttribute("aria-expanded", String(!collapsed));
+  sidebarToggle.setAttribute("aria-label", collapsed ? "展开侧边栏" : "收起侧边栏");
+};
+
+const syncSidebarMode = () => {
+  applySidebarMode(getStoredSidebarMode() || getDefaultSidebarMode());
+};
+
+const toggleSidebar = () => {
+  const next = document.body.classList.contains("sidebar-collapsed") ? "expanded" : "collapsed";
+  localStorage.setItem("sidebar-mode", next);
+  applySidebarMode(next);
+};
+
+const collapseCompactSidebar = () => {
+  if (compactSidebarMedia.matches) applySidebarMode("collapsed");
 };
 
 const parseFrontMatter = (markdown) => {
@@ -496,6 +527,7 @@ const route = async () => {
 const init = async () => {
   document.querySelector("#year").textContent = new Date().getFullYear();
   applyTheme(getStoredTheme());
+  syncSidebarMode();
 
   await loadSiteConfig();
 
@@ -512,6 +544,7 @@ categoryList.addEventListener("click", (event) => {
   renderFilters();
   location.hash = "#/";
   renderPostList();
+  collapseCompactSidebar();
 });
 
 tagList.addEventListener("click", (event) => {
@@ -521,6 +554,7 @@ tagList.addEventListener("click", (event) => {
   renderFilters();
   location.hash = "#/";
   renderPostList();
+  collapseCompactSidebar();
 });
 
 searchInput.addEventListener("input", (event) => {
@@ -534,6 +568,10 @@ window.addEventListener("keydown", (event) => {
   if (event.key === "Escape") mermaidViewer?.close();
 });
 themeToggle.addEventListener("click", cycleTheme);
+sidebarToggle.addEventListener("click", toggleSidebar);
+compactSidebarMedia.addEventListener("change", () => {
+  if (!getStoredSidebarMode()) syncSidebarMode();
+});
 
 init().catch((error) => {
   console.error(error);
