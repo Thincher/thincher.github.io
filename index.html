@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Thincher</title>
+    <meta name="description" content="Thincher 的个人博客，记录技术、学习与思考。">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="stylesheet" href="assets/styles.css">
+  </head>
+  <body>
+    <aside class="profile-sidebar">
+      <a class="brand" href="#/">
+        <span class="brand-mark">T</span>
+        <span>
+          <strong>Thincher</strong>
+          <small>文字、技术与长期思考</small>
+        </span>
+      </a>
+
+      <nav class="site-nav" aria-label="主导航">
+        <a href="#/"><span>文章</span></a>
+        <a href="#/archive"><span>归档</span></a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换主题">
+          <span class="theme-icon" aria-hidden="true"></span>
+          <span class="theme-label">自动</span>
+        </button>
+        <small>© <span id="year"></span> Thincher</small>
+      </div>
+    </aside>
+
+    <main class="page">
+      <div class="topbar">
+        <div class="search-panel">
+          <label for="search-input">搜索</label>
+          <input id="search-input" type="search" placeholder="标题、摘要、标签">
+        </div>
+      </div>
+
+      <section class="intro" aria-labelledby="intro-title">
+        <p class="eyebrow">Personal Blog</p>
+        <h1 id="intro-title">把想清楚的事写下来。</h1>
+        <p>一个简单、克制、适合长文阅读的个人博客。支持分类、标签、Markdown 与 Mermaid 图表。</p>
+      </section>
+
+      <section class="layout">
+        <section class="content" aria-live="polite">
+          <div id="app"></div>
+        </section>
+
+        <aside class="filter-sidebar" aria-label="筛选文章">
+          <div class="panel">
+            <h2>分类</h2>
+            <div id="category-list" class="filter-list"></div>
+          </div>
+
+          <div class="panel">
+            <h2>标签</h2>
+            <div id="tag-list" class="tag-cloud"></div>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.5/dist/purify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked@15.0.7/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11.6.0/dist/mermaid.min.js"></script>
+    <script src="assets/app.js"></script>
+  </body>
+</html>
