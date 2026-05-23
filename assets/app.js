@@ -11,10 +11,11 @@ const categoryList = document.querySelector("#category-list");
 const tagList = document.querySelector("#tag-list");
 const themeToggle = document.querySelector("#theme-toggle");
 const themeLabel = document.querySelector(".theme-label");
+const introTitle = document.querySelector("#intro-title");
+const introDescription = document.querySelector("#intro-description");
 const themeMedia = window.matchMedia("(prefers-color-scheme: dark)");
 
 const themeLabels = {
-  auto: "自动",
   light: "亮色",
   dark: "暗色",
 };
@@ -38,10 +39,14 @@ const formatDate = (date) =>
 const slugify = (value) =>
   encodeURIComponent(String(value).trim().toLowerCase().replace(/\s+/g, "-"));
 
-const getStoredTheme = () => localStorage.getItem("theme-mode") || "auto";
+const getStoredTheme = () => {
+  const stored = localStorage.getItem("theme-mode");
+  if (stored === "light" || stored === "dark") return stored;
+  return themeMedia.matches ? "dark" : "light";
+};
 
 const getResolvedTheme = (mode) =>
-  mode === "auto" ? (themeMedia.matches ? "dark" : "light") : mode;
+  mode === "dark" ? "dark" : "light";
 
 const applyTheme = (mode) => {
   const resolved = getResolvedTheme(mode);
@@ -53,7 +58,7 @@ const applyTheme = (mode) => {
 
 const cycleTheme = () => {
   const current = getStoredTheme();
-  const next = current === "auto" ? "light" : current === "light" ? "dark" : "auto";
+  const next = current === "light" ? "dark" : "light";
   localStorage.setItem("theme-mode", next);
   applyTheme(next);
 };
@@ -102,6 +107,19 @@ const activateMermaidBlocks = () => {
 
 const sortPosts = (posts) =>
   [...posts].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+const loadSiteConfig = async () => {
+  try {
+    const response = await fetch("site.config.json");
+    if (!response.ok) return;
+
+    const config = await response.json();
+    if (config.title) introTitle.textContent = config.title;
+    if (config.description) introDescription.textContent = config.description;
+  } catch (error) {
+    console.warn("站点配置加载失败，使用默认文案。", error);
+  }
+};
 
 const renderFilters = () => {
   const categories = ["全部", ...new Set(state.posts.map((post) => post.category))];
@@ -173,7 +191,6 @@ const renderArchive = () => {
 
   app.innerHTML = `<div class="article">
     <div class="article-header">
-      <a class="back-link" href="#/">返回文章</a>
       <h1>归档</h1>
       <p class="article-meta">${state.posts.length} 篇文章</p>
     </div>
@@ -214,7 +231,6 @@ const renderArticle = async (slug) => {
 
   app.innerHTML = `<article class="article">
     <header class="article-header">
-      <a class="back-link" href="#/">返回文章</a>
       <div class="article-meta">
         <time datetime="${escapeHtml(date)}">${formatDate(date)}</time>
         <span>·</span>
@@ -241,10 +257,16 @@ const setActiveNav = () => {
   });
 };
 
+const setPageState = (section) => {
+  document.body.classList.toggle("is-home", !section);
+  document.body.classList.toggle("is-detail", section === "post" || section === "archive");
+};
+
 const route = async () => {
   setActiveNav();
   const hash = location.hash || "#/";
   const [, section, slug] = hash.split("/");
+  setPageState(section);
 
   if (section === "post" && slug) {
     await renderArticle(slug);
@@ -262,6 +284,8 @@ const route = async () => {
 const init = async () => {
   document.querySelector("#year").textContent = new Date().getFullYear();
   applyTheme(getStoredTheme());
+
+  await loadSiteConfig();
 
   const response = await fetch("posts/index.json");
   state.posts = await response.json();
@@ -296,9 +320,6 @@ searchInput.addEventListener("input", (event) => {
 
 window.addEventListener("hashchange", route);
 themeToggle.addEventListener("click", cycleTheme);
-themeMedia.addEventListener("change", () => {
-  if (getStoredTheme() === "auto") applyTheme("auto");
-});
 
 init().catch((error) => {
   console.error(error);

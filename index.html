@@ -23,11 +23,19 @@
         <a href="#/archive"><span>归档</span></a>
       </nav>
 
+      <section class="filter-drawer" aria-label="筛选文章">
+        <div class="panel">
+          <h2>分类</h2>
+          <div id="category-list" class="filter-list"></div>
+        </div>
+
+        <div class="panel">
+          <h2>标签</h2>
+          <div id="tag-list" class="tag-cloud"></div>
+        </div>
+      </section>
+
       <div class="sidebar-footer">
-        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换主题">
-          <span class="theme-icon" aria-hidden="true"></span>
-          <span class="theme-label">自动</span>
-        </button>
         <small>© <span id="year"></span> Thincher</small>
       </div>
     </aside>
@@ -35,33 +43,25 @@
     <main class="page">
       <div class="topbar">
         <div class="search-panel">
-          <label for="search-input">搜索</label>
-          <input id="search-input" type="search" placeholder="标题、摘要、标签">
+          <label class="sr-only" for="search-input">搜索</label>
+          <input id="search-input" type="search" placeholder="搜索标题、摘要、标签">
         </div>
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换主题">
+          <span class="theme-icon" aria-hidden="true"></span>
+          <span class="theme-label sr-only">亮色</span>
+        </button>
       </div>
 
       <section class="intro" aria-labelledby="intro-title">
         <p class="eyebrow">Personal Blog</p>
         <h1 id="intro-title">把想清楚的事写下来。</h1>
-        <p>一个简单、克制、适合长文阅读的个人博客。支持分类、标签、Markdown 与 Mermaid 图表。</p>
+        <p id="intro-description">一个简单、克制、适合长文阅读的个人博客。支持分类、标签、Markdown 与 Mermaid 图表。</p>
       </section>
 
       <section class="layout">
         <section class="content" aria-live="polite">
           <div id="app"></div>
         </section>
-
-        <aside class="filter-sidebar" aria-label="筛选文章">
-          <div class="panel">
-            <h2>分类</h2>
-            <div id="category-list" class="filter-list"></div>
-          </div>
-
-          <div class="panel">
-            <h2>标签</h2>
-            <div id="tag-list" class="tag-cloud"></div>
-          </div>
-        </aside>
       </section>
     </main>
 
