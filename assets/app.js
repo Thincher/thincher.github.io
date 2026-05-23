@@ -30,14 +30,25 @@ const escapeHtml = (value = "") =>
   })[char]);
 
 const formatDate = (date) =>
-  new Intl.DateTimeFormat("zh-CN", {
+  date && !Number.isNaN(new Date(date).getTime())
+    ? new Intl.DateTimeFormat("zh-CN", {
     year: "numeric",
     month: "long",
     day: "numeric",
-  }).format(new Date(date));
+  }).format(new Date(date))
+    : "未标日期";
 
 const slugify = (value) =>
   encodeURIComponent(String(value).trim().toLowerCase().replace(/\s+/g, "-"));
+
+const withCacheBust = (path) => {
+  const url = new URL(path, window.location.href);
+  url.searchParams.set("v", Date.now().toString());
+  return url.toString();
+};
+
+const fetchFresh = (path) =>
+  fetch(withCacheBust(path), { cache: "no-store" });
 
 const getStoredTheme = () => {
   const stored = localStorage.getItem("theme-mode");
@@ -96,6 +107,55 @@ const parseFrontMatter = (markdown) => {
   return { data, body };
 };
 
+const normalizeTags = (tags) => {
+  if (Array.isArray(tags)) return tags;
+  if (typeof tags === "string" && tags.trim()) {
+    return tags.split(",").map((tag) => tag.trim()).filter(Boolean);
+  }
+  return [];
+};
+
+const getPostFile = (entry) => {
+  if (typeof entry === "string") return entry;
+  return entry.file || `posts/${entry.slug}.md`;
+};
+
+const getPostSlug = (entry, file) => {
+  if (typeof entry === "object" && entry.slug) return entry.slug;
+  return file.split("/").pop().replace(/\.md$/i, "");
+};
+
+const makeDescription = (body) =>
+  body
+    .replace(/```[\s\S]*?```/g, "")
+    .replace(/[#>*_`[\]()]/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 120);
+
+const loadPostMeta = async (entry) => {
+  const file = getPostFile(entry);
+  const response = await fetchFresh(file);
+
+  if (!response.ok) {
+    throw new Error(`文章加载失败：${file}`);
+  }
+
+  const markdown = await response.text();
+  const parsed = parseFrontMatter(markdown);
+  const slug = getPostSlug(entry, file);
+
+  return {
+    slug,
+    file,
+    title: parsed.data.title || slug,
+    date: parsed.data.date || "",
+    category: parsed.data.category || "未分类",
+    tags: normalizeTags(parsed.data.tags),
+    description: parsed.data.description || makeDescription(parsed.body),
+  };
+};
+
 const activateMermaidBlocks = () => {
   document.querySelectorAll("pre code.language-mermaid").forEach((block) => {
     const container = document.createElement("div");
@@ -110,7 +170,7 @@ const sortPosts = (posts) =>
 
 const loadSiteConfig = async () => {
   try {
-    const response = await fetch("site.config.json");
+    const response = await fetchFresh("site.config.json");
     if (!response.ok) return;
 
     const config = await response.json();
@@ -119,6 +179,12 @@ const loadSiteConfig = async () => {
   } catch (error) {
     console.warn("站点配置加载失败，使用默认文案。", error);
   }
+};
+
+const loadPosts = async () => {
+  const response = await fetchFresh("posts/index.json");
+  const entries = await response.json();
+  return Promise.all(entries.map(loadPostMeta));
 };
 
 const renderFilters = () => {
@@ -206,7 +272,7 @@ const renderArticle = async (slug) => {
     return;
   }
 
-  const response = await fetch(post.file);
+  const response = await fetchFresh(post.file);
   if (!response.ok) {
     app.innerHTML = `<div class="empty">文章加载失败。</div>`;
     return;
@@ -217,7 +283,7 @@ const renderArticle = async (slug) => {
   const title = parsed.data.title || post.title;
   const date = parsed.data.date || post.date;
   const category = parsed.data.category || post.category;
-  const tags = parsed.data.tags || post.tags || [];
+  const tags = normalizeTags(parsed.data.tags || post.tags);
 
   marked.setOptions({
     breaks: true,
@@ -287,8 +353,7 @@ const init = async () => {
 
   await loadSiteConfig();
 
-  const response = await fetch("posts/index.json");
-  state.posts = await response.json();
+  state.posts = await loadPosts();
   renderFilters();
   await route();
 };

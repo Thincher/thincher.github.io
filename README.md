@@ -17,7 +17,9 @@ description: 文章摘要
 ---
 ```
 
-3. 在 `posts/index.json` 登记文章信息。
+3. 在 `posts/index.json` 只登记 Markdown 文件路径，例如 `"posts/example.md"`。
+
+文章标题、日期、分类、标签和摘要都以 Markdown 文件顶部的 front matter 为准，不要在索引里重复维护。
 
 ## 功能
 

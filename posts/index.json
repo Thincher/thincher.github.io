@@ -1,20 +1,4 @@
 [
-  {
-    "slug": "mem0-deep-analysis",
-    "title": "Mem0 项目深度分析",
-    "date": "2026-05-23",
-    "category": "技术",
-    "tags": ["Mem0", "架构", "Mermaid"],
-    "description": "从写入、检索、更新和删除流程拆解 Mem0 的核心架构与关键实现。",
-    "file": "posts/mem0-deep-analysis.md"
-  },
-  {
-    "slug": "start-here",
-    "title": "博客从这里开始",
-    "date": "2026-05-23",
-    "category": "随笔",
-    "tags": ["博客", "Markdown", "Mermaid"],
-    "description": "这是一篇示例文章，展示 Markdown 排版、分类标签和 Mermaid 图表渲染。",
-    "file": "posts/start-here.md"
-  }
+  "posts/mem0-deep-analysis.md",
+  "posts/start-here.md"
 ]
