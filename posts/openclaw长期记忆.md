@@ -68,16 +68,10 @@ flowchart TD
         DEEP -->|"snippet rehydration</br>写入前从实时每日文件重新读取</br>跳过已编辑/删除的过时片段"| MEMORY
     end
 
-    subgraph BOOTSTRAP["🚀 注入层（session 启动）"]
-        MEMORY -->|"bootstrap 时注入</br>全量注入 system prompt"| SESSION["agent session<br>模型收到 MEMORY.md + AGENTS.md + SOUL.md 等</br>作为长期背景知识（总上限 60000 chars）"]
-        TOPK -->|"每次对话注入<br>systemPromptAddition"| SESSION
-    end
-
     style WRITE fill:#eef2ff,stroke:#7c8ef0,color:#333
     style INDEX fill:#f0fff4,stroke:#52c77a,color:#333
     style RECALL fill:#fff5f5,stroke:#e70f0f,color:#333
     style DREAM fill:#fffbeb,stroke:#d4a830,color:#333
-    style BOOTSTRAP fill:#f0fafa,stroke:#3ab0b0,color:#333
 ```
 
 ## 📝 写入机制
