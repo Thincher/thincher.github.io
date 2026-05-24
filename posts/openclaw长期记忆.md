@@ -1,9 +1,8 @@
-
-> ---
+---
 title: OpenClaw 长期记忆系统深度解析
 date: 2026-05-24
 category: RAG
-tags: [Memory, RAG, AI-Agent]
+tags: [长期记忆, RAG, openclaw]
 description: 解析 OpenClaw 的「写入 → 索引 → 检索 → Dreaming」层级记忆架构。
 ---
 
