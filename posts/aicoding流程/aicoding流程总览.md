@@ -8,15 +8,6 @@ description: 结合个人认知与 OpenSpec / Spec Kit / Superpowers 三大开�
 
 # aicoding 流程总结（v0.1）
 
-> **目的**：结合用户的认知 + 三个 aicoding 项目（OpenSpec / Spec Kit / Superpowers）的实现，写一篇可指导实践的总结。
->
-> **认知来源**：`/Volumes/外接/代码/体系化学习/草稿/aicoding 流程/aiCoding总流程.md`
-> **项目来源**：OpenSpec / Spec Kit / Superpowers 的题目清单与官方文档
->
-> **结构**：1. 解决什么问题 → 2. 抽象的总体流程 → 3. 每个项目的特点
-
----
-
 # 一、解决什么问题
 
 ## 1.1 三个本质问题
