@@ -6,6 +6,13 @@ tags: [RAG,Graph,VectorSearch]
 description: 解析 LightRAG 的知识图谱 + 向量混合检索架构与写入检索流程。
 ---
 
+## RAG
+
+- [概述](#概述)
+- [写入](#写入)
+- [检索](#检索)
+  - [存储详解](#存储详解)
+
 # 概述
 
 LightRAG 是一个基于知识图谱的检索增强生成（RAG）框架。写入时，文档经去重、Chunking 后并行存储，同时通过 LLM 提取实体和关系构建知识图谱。检索时支持多种模式（naive/local/global/hybrid/mix/bypass），mix 模式结合实体图遍历、关系检索和向量 chunks 检索，通过 Round-Robin 合并结果后交由 LLM 生成答案。LightRAG 采用 4 类存储：KV Storage（文档/chunks/索引）、Vector Storage（向量索引）、Graph Storage（实体关系图）、Doc Status Storage（处理状态）。

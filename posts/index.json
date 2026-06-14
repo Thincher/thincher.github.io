@@ -1,6 +1,13 @@
 [
-  "posts/TencentDB Agent Memory.md",
-  "posts/LightRAG_Architecture_Analysis.md",
   "posts/openclaw长期记忆.md",
+  "posts/rag/LightRAG.md",
+  "posts/rag/TencentDB-Agent-Memory.md",
+  "posts/rag/gbrain.md",
+  "posts/rag/graphrag.md",
+  "posts/rag/karpathy-llmwiki.md",
+  "posts/rag/llm_wiki.md",
+  "posts/rag/mem0.md",
+  "posts/rag/openviking.md",
+  "posts/rag/知识库总览.md",
   "posts/start-here.md"
 ]
