@@ -360,7 +360,18 @@ const loadSiteConfig = async () => {
 const loadPosts = async () => {
   const response = await fetchFresh("posts/index.json");
   const entries = await response.json();
-  return Promise.all(entries.map(loadPostMeta));
+  const settled = await Promise.allSettled(entries.map(loadPostMeta));
+  const posts = [];
+
+  settled.forEach((result) => {
+    if (result.status === "fulfilled") {
+      posts.push(result.value);
+    } else {
+      console.warn(result.reason);
+    }
+  });
+
+  return posts;
 };
 
 const renderFilters = () => {
