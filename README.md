@@ -48,3 +48,5 @@
 ```bash
 git add -A && git commit -m "新增文章：标题" && git push
 ```
+
+> **改 `assets/style.css` 后必须改版本号**：`index.html` / `_template.html` 里的 `style.css?v=20261107`，把日期改掉再推——Pages 的 CSS 缓存 10 分钟，不改版本号线上会继续用旧样式。
