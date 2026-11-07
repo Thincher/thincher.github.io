@@ -4,11 +4,21 @@
 
 零依赖多页静态站：每篇文章就是一个 HTML 文件，浏览器直接渲染，没有前端框架、没有 CDN、没有构建步骤。
 
+## 两个分类
+
+| 分类 | 放什么 | 首页位置 |
+|---|---|---|
+| **开源项目** | 单个开源项目的源码/设计分析（OpenViking、Codex、the agent harness…） | `#projects` |
+| **优质文章** | 原创整理、方法论、读书/论文笔记、流程总结 | `#essays` |
+
+一篇文章只归一个分类，靠首页放在哪个 `<ul>` 和文章页的 `<span class="article-cat">` 区分，不做多分类。
+分类之间不加子目录，`posts/` 保持平铺，避免路径越走越深。
+
 ## 目录
 
 ```
 个人博客/
-├── index.html      # 首页：文章列表（加文章时手写一行 li）
+├── index.html      # 首页：两个分类的文章列表（加文章时手写一行 li）
 ├── _template.html  # 新文章模板，复制成 posts/<slug>.html 后改
 ├── posts/          # 文章，一篇一个 HTML 文件
 └── assets/
@@ -18,9 +28,9 @@
 
 ## 加一篇文章
 
-1. 复制 `_template.html` → `posts/<slug>.html`，改 `<title>`、`<h1>`、`<time>`、标签和 `<meta name="description">`。
+1. 复制 `_template.html` → `posts/<slug>.html`，改 `<title>`、`<h1>`、`<span class="article-cat">`（开源项目 / 优质文章）、`<time>`、标签和 `<meta name="description">`。
 2. 正文**整段粘贴进 `<div class="prose">`**：`h2/h3`、`p`、`ul/ol`、`table`、`pre><code>`、`blockquote` 都已有样式。
-3. 在 `index.html` 的 `<ul class="post-list">` 里加一行（模板里有注释示例），按日期倒序放。
+3. 在 `index.html` 对应分类的 `<ul class="post-list">` 里加一行（模板里有注释示例），按日期倒序放。
 4. 本地预览：`python3 -m http.server 8800`，开 `http://127.0.0.1:8800/`。
 
 ## 从工作台拷贝的约定

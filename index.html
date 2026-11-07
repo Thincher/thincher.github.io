@@ -21,9 +21,15 @@
         <span class="brand-mark">T</span>
         <span class="brand-name">Thincher</span>
       </a>
-      <button class="theme-toggle" type="button" aria-label="切换深浅色">
-        <span class="theme-icon" aria-hidden="true"></span>
-      </button>
+      <div class="header-tools">
+        <nav class="site-nav" aria-label="分类">
+          <a href="#projects">开源项目</a>
+          <a href="#essays">优质文章</a>
+        </nav>
+        <button class="theme-toggle" type="button" aria-label="切换深浅色">
+          <span class="theme-icon" aria-hidden="true"></span>
+        </button>
+      </div>
     </header>
 
     <main class="page">
@@ -32,8 +38,8 @@
         <p>简单、克制、沉淀。技术、学习与长期思考。</p>
       </section>
 
-      <section class="posts" aria-labelledby="posts-title">
-        <h2 id="posts-title" class="section-title">文章</h2>
+      <section class="posts" id="projects" aria-labelledby="projects-title">
+        <h2 id="projects-title" class="section-title">开源项目</h2>
 
         <!--
           加文章：把下面这行取消注释，路径、日期、标题、标签改掉即可。
@@ -45,6 +51,13 @@
             </a>
           </li>
         -->
+        <ul class="post-list">
+          <li class="post-list-empty">还没有开源项目分析。</li>
+        </ul>
+      </section>
+
+      <section class="posts" id="essays" aria-labelledby="essays-title">
+        <h2 id="essays-title" class="section-title">优质文章</h2>
         <ul class="post-list">
           <li class="post-list-empty">还没有文章。慢慢来，先想清楚，再写下来。</li>
         </ul>

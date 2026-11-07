@@ -118,6 +118,27 @@ a:hover {
   font-weight: 700;
 }
 
+.header-tools {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.site-nav {
+  display: flex;
+  gap: 20px;
+  font-size: 14px;
+}
+
+.site-nav a {
+  color: var(--text-soft);
+}
+
+.site-nav a:hover {
+  color: var(--text);
+  text-decoration: none;
+}
+
 .theme-toggle {
   display: grid;
   place-items: center;
@@ -190,6 +211,14 @@ html[data-theme="dark"] .theme-icon {
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+}
+
+.posts {
+  scroll-margin-top: 84px;
+}
+
+.posts + .posts .section-title {
+  margin-top: 56px;
 }
 
 /* ---------- 文章列表 ---------- */
@@ -275,6 +304,10 @@ html[data-theme="dark"] .theme-icon {
 .article-meta {
   color: var(--text-faint);
   font-size: 14px;
+}
+
+.article-cat {
+  color: var(--accent);
 }
 
 .article-nav {
@@ -508,6 +541,15 @@ html[data-theme="dark"] .theme-icon {
 
   .site-header {
     padding: 14px 20px;
+  }
+
+  .header-tools {
+    gap: 14px;
+  }
+
+  .site-nav {
+    gap: 14px;
+    font-size: 13px;
   }
 
   .page {
