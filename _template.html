@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>文章标题 · Thincher</title>
+    <meta name="description" content="一句话摘要">
+    <link rel="stylesheet" href="../assets/style.css">
+    <script>
+      (function () {
+        var t = localStorage.getItem('theme');
+        document.documentElement.dataset.theme =
+          t || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      })();
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="../index.html">
+        <span class="brand-mark">T</span>
+        <span class="brand-name">Thincher</span>
+      </a>
+      <button class="theme-toggle" type="button" aria-label="切换深浅色">
+        <span class="theme-icon" aria-hidden="true"></span>
+      </button>
+    </header>
+
+    <main class="page article-page">
+      <a class="back-link" href="../index.html">← 全部文章</a>
+
+      <article class="article">
+        <header class="article-header">
+          <h1>文章标题</h1>
+          <div class="article-meta">
+            <time datetime="2026-11-07">2026-11-07</time>
+            <span class="dot">·</span>
+            <span class="article-tags">标签一 · 标签二</span>
+          </div>
+        </header>
+
+        <div class="prose">
+          <!-- 正文从工作台原样拷贝到这里：h2 / h3、p、ul、blockquote、table、pre>code，
+               需要强调用 .callout，需要插图用 <figure>。不要在这里塞整页 HTML。 -->
+          <p>正文。</p>
+        </div>
+      </article>
+
+      <nav class="article-nav">
+        <a href="../index.html">← 全部文章</a>
+      </nav>
+    </main>
+
+    <footer class="site-footer">
+      <span>© <span class="year">2026</span> Thincher</span>
+      <span class="dot">·</span>
+      <a href="https://github.com/Thincher" rel="noopener">GitHub</a>
+    </footer>
+
+    <script src="../assets/app.js"></script>
+  </body>
+</html>

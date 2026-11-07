@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Thincher</title>
+    <meta name="description" content="把想清楚的事写下来。技术、学习与长期思考。">
+    <link rel="stylesheet" href="assets/style.css">
+    <script>
+      /* 主题要在首屏渲染前定下来，避免亮→暗闪一下 */
+      (function () {
+        var t = localStorage.getItem('theme');
+        document.documentElement.dataset.theme =
+          t || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      })();
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">T</span>
+        <span class="brand-name">Thincher</span>
+      </a>
+      <button class="theme-toggle" type="button" aria-label="切换深浅色">
+        <span class="theme-icon" aria-hidden="true"></span>
+      </button>
+    </header>
+
+    <main class="page">
+      <section class="intro">
+        <h1>把想清楚的事写下来。</h1>
+        <p>简单、克制、沉淀。技术、学习与长期思考。</p>
+      </section>
+
+      <section class="posts" aria-labelledby="posts-title">
+        <h2 id="posts-title" class="section-title">文章</h2>
+
+        <!--
+          加文章：把下面这行取消注释，路径、日期、标题、标签改掉即可。
+          <li>
+            <a class="post-item" href="posts/slug.html">
+              <time datetime="2026-11-07">2026-11-07</time>
+              <span class="post-title">文章标题</span>
+              <span class="post-tags">标签一 · 标签二</span>
+            </a>
+          </li>
+        -->
+        <ul class="post-list">
+          <li class="post-list-empty">还没有文章。慢慢来，先想清楚，再写下来。</li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>© <span id="year">2026</span> Thincher</span>
+      <span class="dot">·</span>
+      <a href="https://github.com/Thincher" rel="noopener">GitHub</a>
+    </footer>
+
+    <script src="assets/app.js"></script>
+  </body>
+</html>
