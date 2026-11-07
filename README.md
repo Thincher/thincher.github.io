@@ -8,8 +8,8 @@
 
 | 分类 | 放什么 | 首页位置 |
 |---|---|---|
-| **开源项目** | 单个开源项目的源码/设计分析（OpenViking、Codex、the agent harness…） | `#projects` |
-| **优质文章** | 原创整理、方法论、读书/论文笔记、流程总结 | `#essays` |
+| **开源项目解析** | 单个开源项目的源码/设计分析（OpenViking、Codex、the agent harness…） | `#projects` |
+| **优质博客阅读** | 优质文章的阅读笔记、精华提取、方法论、流程总结 | `#essays` |
 
 一篇文章只归一个分类，靠首页放在哪个 `<ul>` 和文章页的 `<span class="article-cat">` 区分，不做多分类。
 分类之间不加子目录，`posts/` 保持平铺，避免路径越走越深。
@@ -28,7 +28,7 @@
 
 ## 加一篇文章
 
-1. 复制 `_template.html` → `posts/<slug>.html`，改 `<title>`、`<h1>`、`<span class="article-cat">`（开源项目 / 优质文章）、`<time>`、标签和 `<meta name="description">`。
+1. 复制 `_template.html` → `posts/<slug>.html`，改 `<title>`、`<h1>`、`<span class="article-cat">`（开源项目解析 / 优质博客阅读）、`<time>`、标签和 `<meta name="description">`。
 2. 正文**整段粘贴进 `<div class="prose">`**：`h2/h3`、`p`、`ul/ol`、`table`、`pre><code>`、`blockquote` 都已有样式。
 3. 在 `index.html` 对应分类的 `<ul class="post-list">` 里加一行（模板里有注释示例），按日期倒序放。
 4. 本地预览：`python3 -m http.server 8800`，开 `http://127.0.0.1:8800/`。
@@ -49,4 +49,4 @@
 git add -A && git commit -m "新增文章：标题" && git push
 ```
 
-> **改 `assets/style.css` 后必须改版本号**：`index.html` / `_template.html` 里的 `style.css?v=20261107`，把日期改掉再推——Pages 的 CSS 缓存 10 分钟，不改版本号线上会继续用旧样式。
+> **改 `assets/style.css` 后必须改版本号**：`index.html` / `_template.html` 里的 `style.css?v=20261107b`，把日期改掉再推——Pages 的 CSS 缓存 10 分钟，不改版本号线上会继续用旧样式。

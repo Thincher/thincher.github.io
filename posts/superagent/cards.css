@@ -6,7 +6,7 @@
    ============================================================ */
 
 :root {
-  --paper: #f8f5ec;        /* 全局背景 · 暖米 */
+  --paper: #faf9f5;        /* 全局背景 · 暖米(2026-11-07 老板指定) */
   --paper-raise: #ffffff;  /* 抬升面 · 纯白卡 */
   --ink: #374151;          /* 主文字 / 描边 */
   --blue: #1e40af;         /* 标题蓝 */
@@ -55,16 +55,7 @@ section.card {
   position: relative;
 }
 
-/* 背景点阵,同视频动态图解 */
-section.card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: radial-gradient(rgba(55, 65, 81, 0.08) 1.4px, transparent 1.4px);
-  background-size: 30px 30px;
-  pointer-events: none;
-}
-section.card > * { position: relative; z-index: 1; }
+/* 背景纯色,不铺点阵(2026-11-07 老板定:不要黑点) */
 
 /* 字号档位(按 1440 高度标定,楷体比黑体视觉更小,档位整体上调) */
 .t-hero  { font-size: 92px; font-weight: 700; line-height: 1.16; letter-spacing: 0.01em; }

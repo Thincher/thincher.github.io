@@ -13,7 +13,7 @@
 }
 
 html[data-theme="light"] {
-  --bg: #f8f5ec;
+  --bg: #faf9f5;
   --bg-soft: #f1ecdf;
   --text: #374151;
   --text-soft: #6b7280;
@@ -23,7 +23,6 @@ html[data-theme="light"] {
   --accent: #b45309;
   --accent-soft: #f3e2cc;
   --code-bg: #f2ecdd;
-  --dot: rgba(55, 65, 81, 0.055);
   --shadow: 0 1px 2px rgba(55, 65, 81, 0.06);
 }
 
@@ -38,7 +37,6 @@ html[data-theme="dark"] {
   --accent: #d99a5b;
   --accent-soft: #33271d;
   --code-bg: #231f18;
-  --dot: rgba(232, 226, 213, 0.045);
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
@@ -55,9 +53,7 @@ html {
 
 body {
   margin: 0;
-  background-color: var(--bg);
-  background-image: radial-gradient(var(--dot) 1.2px, transparent 1.2px);
-  background-size: 28px 28px;
+  background: var(--bg);
   color: var(--text);
   font-family: var(--font-sans);
   font-size: 17px;
