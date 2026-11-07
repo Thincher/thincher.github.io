@@ -49,4 +49,4 @@
 git add -A && git commit -m "新增文章：标题" && git push
 ```
 
-> **改 `assets/style.css` 后必须改版本号**：`index.html` / `_template.html` 里的 `style.css?v=20261107b`，把日期改掉再推——Pages 的 CSS 缓存 10 分钟，不改版本号线上会继续用旧样式。
+> **改样式后必须改版本号**：`index.html` / `_template.html` 里的 `style.css?v=...`，卡片页 `posts/superagent/index.html` 里的 `cards.css?v=...`，改完把版本号一起改再推——Pages 的 CSS 缓存 10 分钟，不改版本号线上会继续用旧样式。
