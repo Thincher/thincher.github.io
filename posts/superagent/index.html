@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>图解 · DeepSeek SuperAgent 精华提取</title>
+  <link rel="stylesheet" href="cards.css">
+  <style>
+    /* 博客页外壳：卡片自适应缩放 + 返回入口。卡片本身样式全在 cards.css */
+    html { --deck-scale: 1; }
+    body {
+      zoom: var(--deck-scale);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+      padding: 88px 0 120px;
+    }
+    section.card { box-shadow: 0 0 0 1px rgba(55, 65, 81, 0.08); }
+    .back-link {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 10;
+      padding: 6px 14px;
+      border: 2.5px solid #374151;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: 3px 3px 0 rgba(55, 65, 81, 0.16);
+      color: #374151;
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      font-size: 16px;
+      text-decoration: none;
+    }
+    .back-link:hover { background: #fff; }
+  </style>
+</head>
+<body>
+<a class="back-link" href="../../index.html">← 全部文章</a>
+
+<!-- ========== 01 · 索引页 ========== -->
+<section class="card" data-name="step1-封面">
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+    <div class="mono rust" style="font-size:32px;font-weight:700;letter-spacing:0.04em">DeepSeek</div>
+    <div class="t-hero" style="font-size:104px;line-height:1.06;margin-top:8px">SuperAgent</div>
+
+    <div style="height:3px;width:140px;background:var(--rust);margin:32px 0 28px"></div>
+
+    <div class="t-h1" style="font-size:56px;line-height:1.35">将万字文章<br><span class="acc">精华提取</span>出来</div>
+    <div class="t-lead" style="margin-top:22px;font-size:31px;line-height:1.55">适合阅读过文章的人群</div>
+
+    <div style="height:2px;background:var(--grey-2);margin:36px 0 28px"></div>
+
+    <div style="font-size:28px;line-height:1.9">
+      <div><span class="mono rust" style="font-weight:700">01</span> 去掉常规的技术</div>
+      <div><span class="mono rust" style="font-weight:700">02</span> 关键的新认知</div>
+      <div><span class="mono rust" style="font-weight:700">03</span> 消融实验得到的认知</div>
+      <div><span class="mono rust" style="font-weight:700">04</span> 关键 Router 如何保证准确性</div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ========== 02 · 01 去掉常规的技术 ========== -->
+<section class="card" data-name="step2-去常规">
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+    <div class="t-h1">先去掉<span class="rust">常规的技术</span></div>
+    <div class="t-lead" style="margin-top:14px">常规技术先拆出去,聚焦核心。</div>
+    <div style="height:2px;background:var(--grey-2);margin:34px 0"></div>
+
+    <div style="display:flex;flex-direction:column;gap:34px">
+      <div>
+        <div style="font-size:32px;font-weight:700">异步 ReAct</div>
+        <div style="font-size:25px;line-height:1.55;margin-top:6px;color:var(--grey-1)">run → start/stop,本质是后台进程 + 轮询 + kill。Claude Code 的 BashOutput、Codex 的 background exec 同款。</div>
+      </div>
+      <div>
+        <div style="font-size:32px;font-weight:700">存算分离</div>
+        <div style="font-size:25px;line-height:1.55;margin-top:6px;color:var(--grey-1)">云上无状态 loop、会话状态入库。Devin、Codex cloud、Cursor cloud agent 都在做。</div>
+      </div>
+      <div>
+        <div style="font-size:32px;font-weight:700">Watchdog</div>
+        <div style="font-size:25px;line-height:1.55;margin-top:6px;color:var(--grey-1)">对应 supervisor / critic / termination-check 那一族,本质是 agent 监控 agent。</div>
+      </div>
+      <div>
+        <div style="font-size:32px;font-weight:700">subagent 续接</div>
+        <div style="font-size:25px;line-height:1.55;margin-top:6px;color:var(--grey-1)">opencode 的 task_id、Claude Code 的 SendMessage 带 agent ID、Codex 的 resume_agent_from_rollout 都能沿用原会话。</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ========== 03 · 02 Router 职责范围 + 对比 ========== -->
+<section class="card" data-name="step3-新认知">
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+    <div class="t-h1" style="font-size:66px;line-height:1.2">新认知<br>和 multi-agent 的区别</div>
+
+    <div style="height:2px;background:var(--grey-2);margin:26px 0 20px"></div>
+
+    <div style="font-size:30px;font-weight:700">触发源从<span class="acc">人</span>变为<span class="acc">信号源</span></div>
+    <div style="font-size:23px;line-height:1.5;margin-top:8px;color:var(--grey-1)">
+      <div>1. session 的归属从个人变成公共,组织里每个人都可以认领这个 session</div>
+      <div style="margin-top:4px">2. 自动化意味着触发效率大幅提升,同时 session 数量也大幅提升</div>
+    </div>
+
+    <div style="margin-top:24px;font-size:30px;font-weight:700">新角色 Router,<span class="acc">入口节点</span></div>
+    <div style="font-size:23px;line-height:1.5;margin-top:8px;color:var(--grey-1)">只做分发,为了吞吐和延续性。</div>
+
+    <div style="margin-top:24px;font-size:30px;font-weight:700">状态外置</div>
+    <div style="font-size:23px;line-height:1.5;margin-top:8px;color:var(--grey-1)">session 不再归属个人,而是和事件绑定,需要记录下来。</div>
+
+    <div style="height:2px;background:var(--grey-2);margin:26px 0 18px"></div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 20px;font-size:24px;line-height:1.35">
+      <div class="mono" style="border-bottom:3px solid var(--ink);padding:8px 0;text-align:center;font-weight:700;margin-bottom:8px">主 agent + 子 agent</div>
+      <div class="mono" style="border-bottom:3px solid var(--ink);padding:8px 0;text-align:center;font-weight:700;margin-bottom:8px">Router + Worker</div>
+
+      <div style="padding:9px 0;border-bottom:1.5px dashed var(--grey-2);font-weight:700">人给指令,跑一次</div>
+      <div style="padding:9px 0;border-bottom:1.5px dashed var(--grey-2);color:var(--grey-1)">信号触发,持续运行</div>
+      <div style="padding:9px 0;border-bottom:1.5px dashed var(--grey-2);font-weight:700">上层随时能自己动手</div>
+      <div style="padding:9px 0;border-bottom:1.5px dashed var(--grey-2);color:var(--grey-1)">上层只分发,不执行</div>
+      <div style="padding:9px 0;font-weight:700">session 归属个人</div>
+      <div style="padding:9px 0;color:var(--grey-1)">session 和事件绑定</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 04 · 03 消融实验 ========== -->
+<section class="card" data-name="step4-消融">
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+    <div class="t-h1" style="font-size:64px;line-height:1.2">消融实验<br>得到的<span class="acc">硬认知</span></div>
+    <div class="t-lead" style="margin-top:14px">约 300 条消息,20 条真工作请求,每方案跑 5 次。</div>
+
+    <div style="height:2px;background:var(--grey-2);margin:26px 0 20px"></div>
+
+    <div style="font-size:30px;font-weight:700">1. 结构性改变</div>
+    <div style="font-size:25px;line-height:1.5;margin-top:8px">纯 prompt <span class="rust" style="font-weight:700">不能硬约束</span> Router 不干活。</div>
+    <div style="display:flex;flex-direction:column;gap:9px;margin-top:12px">
+      <div class="panel" style="padding:12px 22px;display:flex;justify-content:space-between;align-items:baseline">
+        <span style="font-size:24px">中性提示 · 5 次里主动委派</span>
+        <span class="num" style="font-size:36px">0/5</span>
+      </div>
+      <div class="panel" style="padding:12px 22px;display:flex;justify-content:space-between;align-items:baseline">
+        <span style="font-size:24px">强制委派提示 · 主动委派</span>
+        <span class="num" style="font-size:36px">4/5</span>
+      </div>
+      <div class="panel" style="padding:12px 22px;display:flex;justify-content:space-between;align-items:baseline">
+        <span style="font-size:24px">双层结构 · p95 完成时间</span>
+        <span class="num" style="font-size:36px">15.7<span class="t-small" style="margin-left:5px">分钟</span></span>
+      </div>
+      <div class="panel" style="padding:12px 22px;display:flex;justify-content:space-between;align-items:baseline">
+        <span style="font-size:24px">单 Session 中性提示 · p95</span>
+        <span class="num" style="font-size:36px">29.5<span class="t-small" style="margin-left:5px">分钟</span></span>
+      </div>
+    </div>
+    <div style="font-size:22px;line-height:1.5;margin-top:9px;color:var(--grey-1)">提示词只能把「派不派」从 0 拉到 80%,拉不动交接质量。结构上去了,长尾才压得住。</div>
+
+    <div style="height:2px;background:var(--grey-2);margin:24px 0 18px"></div>
+
+    <div style="font-size:30px;font-weight:700">2. 订阅直通</div>
+    <div style="font-size:25px;line-height:1.5;margin-top:8px">已归属的事件由触发层直投 Worker,Router 完全不参与。</div>
+    <div style="display:flex;gap:12px;margin-top:12px">
+      <div style="flex:1;background:rgba(255,255,255,.96);border:2.5px solid var(--ink);border-radius:14px 4px 16px 5px;box-shadow:4px 5px 0 rgba(55,65,81,.16);padding:16px 12px;text-align:center">
+        <div class="num" style="font-size:40px">+30%</div>
+        <div class="t-small" style="font-size:20px;line-height:1.4;margin-top:3px">Router 决策数</div>
+      </div>
+      <div style="flex:1;background:rgba(255,255,255,.96);border:2.5px solid var(--ink);border-radius:4px 16px 5px 14px;box-shadow:4px 5px 0 rgba(55,65,81,.16);padding:16px 12px;text-align:center">
+        <div class="num" style="font-size:40px">+37%</div>
+        <div class="t-small" style="font-size:20px;line-height:1.4;margin-top:3px">Router 读 token</div>
+      </div>
+      <div style="flex:1;background:rgba(255,255,255,.96);border:2.5px solid var(--green);border-radius:14px 4px 14px 4px;box-shadow:4px 5px 0 rgba(55,65,81,.16);padding:16px 12px;text-align:center">
+        <div class="num" style="font-size:40px">≈0%</div>
+        <div class="t-small" style="font-size:20px;line-height:1.4;margin-top:3px">完成时间</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 05 · 04 怎么保证路由准确 ========== -->
+<section class="card" data-name="step5-路由准确">
+  <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+    <div class="t-h1" style="font-size:62px;line-height:1.22">最关键的是<br>Router 如何保证<span class="acc">转发准确性</span></div>
+
+    <div style="margin-top:36px;display:flex;flex-direction:column;gap:30px">
+      <div style="display:flex;gap:18px;align-items:baseline">
+        <span class="mono rust" style="font-size:26px;font-weight:700">1</span>
+        <div style="flex:1">
+          <div style="font-size:30px;font-weight:700">注入质量</div>
+          <div style="font-size:25px;line-height:1.6;margin-top:6px">从「ID + 摘要」起步,按局部性 Inline 前后文、所回复的那条、相邻评论;超预算就 Spill,留续读入口。目的是降低判断难度,不必自己读一遍。</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:18px;align-items:baseline">
+        <span class="mono rust" style="font-size:26px;font-weight:700">2</span>
+        <div style="flex:1">
+          <div style="font-size:30px;font-weight:700">外化记忆</div>
+          <div style="font-size:25px;line-height:1.6;margin-top:6px">对象都有唯一 ID,注入时内联下一跳的 ID,底层连成引用图按需展开。<span style="color:var(--rust);font-weight:700">持有句柄,不持有数据</span>,即链式召回。</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:18px;align-items:baseline">
+        <span class="mono rust" style="font-size:26px;font-weight:700">3</span>
+        <div style="flex:1">
+          <div style="font-size:30px;font-weight:700">归属外置</div>
+          <div style="font-size:25px;line-height:1.6;margin-top:6px">订阅关系存数据库,不在 Router 上下文里。它只判「要不要开新任务」,比判「属于谁」简单一个量级。</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:18px;align-items:baseline">
+        <span class="mono rust" style="font-size:26px;font-weight:700">4</span>
+        <div style="flex:1">
+          <div style="font-size:30px;font-weight:700">允许判错</div>
+          <div style="font-size:25px;line-height:1.6;margin-top:6px">Worker 可退订交回、同一 Thread 多人订阅会在执行侧暴露冲突、Watchdog 从外部判方向。闭环兜住中心节点的判断质量。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+  <script>
+    (function () {
+      function fit() {
+        var s = Math.min(1, (document.documentElement.clientWidth - 24) / 1080);
+        document.documentElement.style.setProperty('--deck-scale', s);
+      }
+      addEventListener('resize', fit);
+      fit();
+    })();
+  </script>
+</body>
+</html>
